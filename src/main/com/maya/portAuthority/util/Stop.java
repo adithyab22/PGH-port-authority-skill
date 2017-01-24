@@ -1,15 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.maya.portAuthority.googleMaps;
+package com.maya.portAuthority.util;
 
 /**
  *
  * @author Adithya
  */
-public class Stop {
+public class Stop implements Comparable<Stop> {
 
     private String stopID;//Stop ID
     private String stopName;//Description of stop
@@ -23,6 +18,8 @@ public class Stop {
     private String timepoint; //Don't know what this is..just says Yes/ No
     private String shelterOwn; //indicates whether the stop has a shelter
     private String stopType; //indicates type of stop: bus stop/ Train et al.
+    private double distance; //in Meters
+    private String walkTime; //in Seconds
     
     public Stop(String stopID, String stopName, double lat, double lon){
         this.stopID = stopID;
@@ -34,6 +31,11 @@ public class Stop {
     public Stop() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+	public int compareTo(Stop s){
+		return Double.compare(distance, s.distance);
+	}
+    
     public String getStopID() {
         return stopID;
     }
@@ -129,5 +131,27 @@ public class Stop {
     public void setStopType(String stopType) {
         this.stopType = stopType;
     }
+
+	public double getDistance() {
+		return distance;
+	}
+
+	public void setDistance(double d) {
+		this.distance = d;
+	}
+
+	public String getWalkTime() {
+		return walkTime;
+	}
+
+	public void setWalkTime(String walkTime) {
+		this.walkTime = walkTime;
+	}
+
+	@Override
+	public String toString() {
+		return "Stop [stopID=" + stopID + ", stopName=" + stopName + ", distance=" + distance + ", walkTime=" + walkTime
+				+ "]";
+	}
 
 }
