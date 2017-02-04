@@ -239,5 +239,10 @@ public class NearestStopLocator {
         }
         return result;
     }
+    
+    public static String buildImage(String locationLat, String locationLon, double stopLat, double stopLon){
+        String url = "https://maps.googleapis.com/maps/api/staticmap?size=1200x800&maptype=roadmap&key="+GOOGLE_MAPS_KEY+"&format=png&visual_refresh=true&markers=size:mid%7Ccolor:0xff0000%7Clabel:1%7C" + locationLat + "," + locationLon + "&markers=size:mid%7Ccolor:0xff0000%7Clabel:2%7C" + stopLat + "," + stopLon+"&path=color:0x0000ff|weight:5|";
+        return url;
+    }
 
 }
