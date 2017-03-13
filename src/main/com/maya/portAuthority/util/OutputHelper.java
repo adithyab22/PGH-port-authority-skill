@@ -76,7 +76,7 @@ public class OutputHelper {
 	 * Speech fragment with instructions to hear all routes.
 	 */
 	private static final String HELP_ALL_ROUTES_SPEECH=CHANGE_MARKER+"to hear predictions for all routes that stop there, say <break time=\"0.25s\" /> Alexa, ask "+GetNextBusSpeechlet.INVOCATION_NAME+" for All Routes";
-       
+        private static final String S3_BUCKET = "ppas-image-upload"; //change name here
 
 	//	public static SpeechletResponse getNoResponse(PaInputData inputData) {
 	//		return getNoResponse(inputData, "");
@@ -157,9 +157,9 @@ public class OutputHelper {
 			prevRouteID=routeID;
 		}
 
-		if ((c.needsMoreHelp())&&(!c.isAllRoutes())){
-			speechOutput+=HELP_ALL_ROUTES_SPEECH;
-		}
+//		if ((c.needsMoreHelp())&&(!c.isAllRoutes())){
+//			speechOutput+=HELP_ALL_ROUTES_SPEECH;
+//		}
 		outputSpeech.setSsml("<speak> " + AUDIO_SUCCESS + speechOutput + "</speak>");
 		Card card;
 		
@@ -184,22 +184,32 @@ public class OutputHelper {
 	private static StandardCard buildCard(String text, String locationLat, String locationLong, double stopLat, double stopLon) throws IOException, JSONException, Exception {
             StandardCard card = new StandardCard();
             Navigation navigation = buildNavigation(locationLat, locationLong, stopLat, stopLon);
-            card.setTitle("Pittsburgh Port Authority");
+            card.setTitle(GetNextBusSpeechlet.INVOCATION_NAME);
             card.setText(text+"\n"+navigation.getInstructions());
             Image image = new Image();
             image.setLargeImageUrl(navigation.getImage());
+            LOGGER.info("LARGE IMAGE URL: "+navigation.getImage());
             card.setImage(image);
             return card;
         }
 
     private static Navigation buildNavigation(String locationLat, String locationLon, double stopLat, double stopLon) throws IOException, JSONException, Exception{	
-        Navigation navigation = new Navigation();
+    	Navigation navigation = new Navigation();
     	JSONObject json = NearestStopLocator.getDirections(locationLat, locationLon, stopLat, stopLon);
         String instructions = Instructions.getInstructions(json);
         String image = NearestStopLocator.buildImage(locationLat, locationLon, stopLat, stopLon) + Instructions.printWayPoints(json);
         image = image.substring(0, image.length() -1); //Remove the last '|'
+        String imageName = locationLat+locationLon+stopLat+stopLon;
+        imageName = imageName.replaceAll("\\.", "");
+        ImageUploader.uploadImage(image, imageName, S3_BUCKET);
+        LOGGER.info("UPLOAD IMAGE SUCCESSFUL WITH NAME: "+imageName);
+        
+       // String tinyURL = TinyURLGenerator.getTinyURL(image);
         navigation.setInstructions(instructions);
-        navigation.setImage(image);
+        //navigation.setImage("https://s3.amazonaws.com/"+S3_BUCKET+"/image/"+ imageName+".png");
+        navigation.setImage("https://s3.amazonaws.com/ppas-image-upload-test1/image2/4043325099999999-7992359840433700261186-79922931511244.png");
+        LOGGER.info("SET IMAGE SUCCESSFUL");
+        //LOGGER.info("IMAGE URL={}",image);
         return navigation;
     }
 
