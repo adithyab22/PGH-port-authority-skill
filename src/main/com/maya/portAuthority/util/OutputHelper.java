@@ -76,7 +76,11 @@ public class OutputHelper {
 	 * Speech fragment with instructions to hear all routes.
 	 */
 	private static final String HELP_ALL_ROUTES_SPEECH=CHANGE_MARKER+"to hear predictions for all routes that stop there, say <break time=\"0.25s\" /> Alexa, ask "+GetNextBusSpeechlet.INVOCATION_NAME+" for All Routes";
+<<<<<<< HEAD
         private static final String S3_BUCKET = "ppas-image-upload"; //change name here
+=======
+       
+>>>>>>> refs/remotes/MichaelBoselowitz/master
 
 	//	public static SpeechletResponse getNoResponse(PaInputData inputData) {
 	//		return getNoResponse(inputData, "");
@@ -201,13 +205,21 @@ public class OutputHelper {
         image = image.substring(0, image.length() -1); //Remove the last '|'
         String imageName = locationLat+locationLon+stopLat+stopLon;
         imageName = imageName.replaceAll("\\.", "");
+<<<<<<< HEAD
         ImageUploader.uploadImage(image, imageName, S3_BUCKET);
+=======
+        ImageUploader.uploadImage(image, imageName);
+>>>>>>> refs/remotes/MichaelBoselowitz/master
         LOGGER.info("UPLOAD IMAGE SUCCESSFUL WITH NAME: "+imageName);
         
        // String tinyURL = TinyURLGenerator.getTinyURL(image);
         navigation.setInstructions(instructions);
+<<<<<<< HEAD
         //navigation.setImage("https://s3.amazonaws.com/"+S3_BUCKET+"/image/"+ imageName+".png");
         navigation.setImage("https://s3.amazonaws.com/ppas-image-upload-test1/image2/4043325099999999-7992359840433700261186-79922931511244.png");
+=======
+        navigation.setImage("https://s3.amazonaws.com/ppas-image-upload/image/"+ imageName+".png");
+>>>>>>> refs/remotes/MichaelBoselowitz/master
         LOGGER.info("SET IMAGE SUCCESSFUL");
         //LOGGER.info("IMAGE URL={}",image);
         return navigation;
